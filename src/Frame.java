@@ -16,13 +16,15 @@ public class Frame extends JPanel{
 	public JPanel panel;
 	public JFrame frame;
 	public JPanel gamepanel;
-	private static int WIDTH = 1920;
-	private static int HEIGHT = 1080;
-
+	public Game gameInstance = new Game();
+	private int WIDTH;
+	private int HEIGHT;
 	
-	public Frame() {
-		frame = new JFrame("Frogger");
-		
+	public Frame(int w, int h) {
+		frame = new JFrame("Tank");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		WIDTH = w;
+		HEIGHT = h;
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -34,8 +36,11 @@ public class Frame extends JPanel{
 				}
 			}
 		});
+		Game game = new Game();
 	}
-
+	
+	
+	
 	public void menuSetUp() {
 		panel = new JPanel();
 		
@@ -43,7 +48,7 @@ public class Frame extends JPanel{
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				startGame();
+				start();
 			}
 		});
 		start.setPreferredSize(new Dimension(100,50));
@@ -61,7 +66,7 @@ public class Frame extends JPanel{
 		panel.add(exit);
 		
 		panel.setBackground(new Color(255,255,255));
-		panel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
+		panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
@@ -70,14 +75,14 @@ public class Frame extends JPanel{
 	}
 		
 	private void start() {
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		System.err.println("Starting Game");
 		gamepanel = new JPanel() {
 			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				Game.drawGame(g);
-				Game.stop(g);
+				gameInstance.drawGame(g);
+				
 			}
 		};
 		
@@ -90,8 +95,9 @@ public class Frame extends JPanel{
 		});
 		exit.setPreferredSize(new Dimension(100,50));
 		gamepanel.add(exit);
+	
 		
-		gamepanel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
+		gamepanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		gamepanel.setBackground(new Color(255, 255, 255));
 		mapKeyStrokesToActions(gamepanel);
 
@@ -103,25 +109,21 @@ public class Frame extends JPanel{
 		timmy = new Timer(10, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Game.updateGame();
+				gameInstance.updateGame();
 				gamepanel.repaint();
 			}
 		});
 		timmy.start();
-		
-		
-	}
-	
-	public void startGame() {
-		start();
-		System.err.println("Starting Game");
+
 		frame.remove(panel);
 		frame.add(gamepanel, BorderLayout.CENTER); 
 		gamepanel.setSize(frame.getSize());
 		frame.repaint();
 		System.err.println(gamepanel.getWidth());
 		gamepanel.requestFocus();
+		
 	}
+	
 	
 
 	private void mapKeyStrokesToActions(JPanel gpanel) {
@@ -146,33 +148,53 @@ public class Frame extends JPanel{
 		inMap.put(KeyStroke.getKeyStroke("pressed S"), "down");
 		inMap.put(KeyStroke.getKeyStroke("pressed A"), "left");
 		inMap.put(KeyStroke.getKeyStroke("pressed D"), "right");
+		inMap.put(KeyStroke.getKeyStroke("pressed Q"), "resTurn");
+		inMap.put(KeyStroke.getKeyStroke("pressed E"), "aim");
+		inMap.put(KeyStroke.getKeyStroke("pressed SPACE"), "shot");
 		// code below associates the "up" action with anything in the 
 		// actionPerformed method.  Right now, it just prints something
 		map.put("up", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Game.hit("up");
+				gameInstance.hit("up");
 			}
 		});
 		map.put("down", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Game.hit("down");
+				gameInstance.hit("down");
 			}
 		});
 		map.put("left", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Game.hit("left");
+				gameInstance.hit("left");
 			}
 		});
 		map.put("right", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Game.hit("right");
+				gameInstance.hit("right");
 			}
 		});
-		
+		map.put("resTurn", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameInstance.hit("resTurn");
+			}
+		});
+		map.put("aim", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameInstance.hit("aim");
+			}
+		});
+		map.put("shot", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				gameInstance.hit("shot");
+			}
+		});
 	}
 	
 	

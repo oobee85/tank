@@ -1,7 +1,7 @@
 
 public class Driver {
 	public static void main(String[] run) {
-		new Frame();
+		new Frame(1920/2, 1080/2);
 	}
 
 }
