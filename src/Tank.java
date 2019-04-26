@@ -25,7 +25,7 @@ public class Tank {
 		if (rect != null) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.rotate(Math.toRadians(10), 240 + 480 / 2, 240 + 480 / 2);
-			g.drawRect(rect.x, rect.y, rect.width, rect.height);
+		//	g.drawRect(rect.x, rect.y, rect.width, rect.height);
 			g2d.rotate(Math.toRadians(-10), 240 + 480 / 2, 240 + 480 / 2);
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
 		}
@@ -47,8 +47,8 @@ public class Tank {
 	
 		int x = (int)(Math.sin(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE);
 		int y = (int)(Math.cos(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE*-1);
-		System.out.println(x+"x");
-		System.out.println(y+"y");
+//		System.out.println(x+"x");
+//		System.out.println(y+"y");
 		rect.translate(x, y);
 		
 	}

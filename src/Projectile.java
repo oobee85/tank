@@ -11,7 +11,9 @@ public class Projectile {
 	private Point point;
 	public int time;
 	public int curTime = 0;
-	public Projectile(int x, int y, int w, int h, int sx, int sy, Color c, Point p, int t) {
+	private int explodeS;
+	
+	public Projectile(int x, int y, int w, int h, int sx, int sy, Color c, Point p, int t, int eS) {
 
 		rect = new Rectangle(x, y, w, h);
 		speedx = sx;
@@ -19,6 +21,7 @@ public class Projectile {
 		color = c;
 		point = p;
 		time = t;
+		explodeS = eS;
 	}
 
 	public void move() {
@@ -46,23 +49,20 @@ public class Projectile {
 	}
 
 	private void fade(Graphics g) {
-		for(int x = 1; x<rect.getWidth(); x++) {
 			if(rect.getWidth()==0) {
 				Rectangle disAp = new Rectangle((int)rect.getX(), (int)rect.getY(), 0, 0);
 				rect = disAp;
 			}
-			Rectangle temp = new Rectangle((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth()-x, (int)rect.getHeight()-x);
+			Rectangle temp = new Rectangle((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth()-1, (int)rect.getHeight()-1);
 			rect = temp;
 			curTime = 0;
-			break;
 			//g.fillRect(rect.x, rect.y, x, x);
 		}
 		
-	}
 	
 	public void explode(Graphics g) {
-		g.fillRect((int) (point.getX() - rect.getWidth()), (int) (point.getY() - rect.getHeight()),
-				(int) rect.getWidth() * 5, (int) rect.getHeight() * 5);
+		g.fillRect((int) (point.getX() - rect.getWidth()*explodeS/2), (int) (point.getY() - rect.getHeight()*explodeS/2),
+				(int) rect.getWidth() * explodeS, (int) rect.getHeight() * explodeS);
 		speedx = 0;
 		speedy = 0;
 	}
