@@ -84,7 +84,7 @@ public class Game {
 	public void keyHit(String str) {
 //		System.out.println("(keyHit): " + s);
 		Tank testtank = tank;
-
+		
 		if (str.equals("up")) {
 			testtank = new Tank(tank.getRect().x, tank.getRect().y - tank.getMoveS(), tank.getRect().width,
 					tank.getRect().height, tank.getTeam(), tank.getColor());
@@ -135,6 +135,7 @@ public class Game {
 		if (str.equals("shot")) {
 			int dx = (int) tank.getRect().getX() - mx;
 			int dy = (int) tank.getRect().getY() - my;
+			
 			Point p = new Point((int) (tank.getRect().getX() + tank.getRect().getWidth()) + 2 * dx,
 					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy);
 			//Projectile(x,y,w,h speedx, speedy, color, point of explosion, time to deteriorate, explode size)
@@ -142,12 +143,14 @@ public class Game {
 			Projectile asdf = new Projectile((int) (tank.getRect().getX() + tank.getRect().getWidth()) + 2 * dx,
 					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy, 5, 5, 0, 0, Color.BLACK, p,
 					50, 5);
-
+			Projectile test = new Projectile((int) (tank.getRect().getX()) ,
+					(int) (tank.getRect().getY()),5,5, 0,0,Color.RED,p,50,5);
+			
 //			Projectile asdf = new Projectile((int)tank.getRect().getX(), (int)tank.getRect().getY(),5, 5, 		//old moving line projectile
 //					((int)tank.getRect().getX()-mx)/10, ((int)tank.getRect().getY()-my)/10, Color.BLACK, p);
 			
 			proj.add(asdf);
-			
+			proj.add(test);
 //			System.out.println(p.getX()+":"+p.getY()+" :point");
 			return;
 		}

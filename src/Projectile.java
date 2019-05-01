@@ -25,10 +25,37 @@ public class Projectile {
 	}
 
 	public void move() {
+		
 		Rectangle temp = new Rectangle();
 		temp.setBounds((int) rect.getX() + speedx, (int) rect.getY() + speedy, (int) rect.getWidth(),
 				(int) rect.getHeight());
 		rect = temp;
+		
+	}
+	public void change(Point p) {
+		int x = (int) p.getX();
+		int y = (int) p.getY();
+		int dx = (int) (p.getX()-rect.getX());
+		int dy = (int) (p.getY()-rect.getY());
+		
+		if(x>rect.getX()) {
+//			Rectangle temp1 = new Rectangle((int)rect.getX()+dx/2, (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
+//			rect = temp;
+			speedx +=1; 
+		}else if(x<rect.getX()) {
+//			Rectangle temp2 = new Rectangle((int)rect.getX()-dx/2, (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
+//			rect = temp;
+			speedx -=1;
+		}
+		if(y>rect.getY()) {
+//			Rectangle temp3 = new Rectangle((int)rect.getX(), (int)rect.getY()+dy/2, (int)rect.getWidth(), (int)rect.getHeight());
+//			rect = temp;
+			speedy +=1;
+		}else if(y<rect.getY()) {
+//			Rectangle temp4 = new Rectangle((int)rect.getX(), (int)rect.getY()-dy/2, (int)rect.getWidth(), (int)rect.getHeight());
+//			rect = temp;
+			speedy -=1;
+		}
 	}
 
 	public Color getColor() {
@@ -42,21 +69,26 @@ public class Projectile {
 		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);
 //		System.out.println(point.getX()+":"+point.getY());
 		if(curTime == time) {
-			fade(g);
+//			fade(g);
 		}
+		change(point);
 		curTime++;
 		
 	}
 
 	private void fade(Graphics g) {
 			if(rect.getWidth()==0) {
-				Rectangle disAp = new Rectangle((int)rect.getX(), (int)rect.getY(), 0, 0);
+//				System.out.println("disap");
+				Rectangle disAp = new Rectangle((int)rect.getX()+100, (int)rect.getY()+100, 1, 1);
 				rect = disAp;
+				
+			}else {
+//				System.out.println("lower");
+				Rectangle temp = new Rectangle((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth()-1, (int)rect.getHeight()-1);
+				rect = temp;
+				curTime = 0;
+				//g.fillRect(rect.x, rect.y, x, x);
 			}
-			Rectangle temp = new Rectangle((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth()-1, (int)rect.getHeight()-1);
-			rect = temp;
-			curTime = 0;
-			//g.fillRect(rect.x, rect.y, x, x);
 		}
 		
 	
