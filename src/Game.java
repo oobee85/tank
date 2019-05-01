@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.dnd.MouseDragGestureRecognizer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import javax.swing.AbstractAction;
@@ -33,8 +34,14 @@ public class Game {
 		wheels.add(wheel);
 
 		Wall wall = new Wall(400, 300, 100, 100, Color.black);
+		Wall wall1 = new Wall(200, 300, 100, 100, Color.black);
+		Wall wall2 = new Wall(400, 100, 100, 100, Color.black);
+		Wall wall3 = new Wall(200, 100, 100, 100, Color.black);
+		
 		walls.add(wall);
-
+		walls.add(wall1);
+		walls.add(wall2);
+		walls.add(wall3);
 		// Projectile a = new Projectile(100, 100, 10, 10, 5, -2, Color.BLUE);
 		// proj.add(a);
 
@@ -47,13 +54,15 @@ public class Game {
 //				System.out.println("hit");
 //				stop();
 //			}
-//		}
+//		}Wall
 //	}
 
+	
 	// 10 milliseconds = 100 times per second
 	protected void updateGame() {
 		ticks++;// track number times timer gone off
-
+		
+		
 		if (ticks % 2 == 0) {
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point b = a.getLocation();
@@ -90,13 +99,17 @@ public class Game {
 			Rectangle nexPo = tank.canMoveF();
 			testtank = new Tank((int)nexPo.getX(),(int)nexPo.getY(), tank.getRect().width,
 					tank.getRect().height, tank.getTeam(), tank.getColor());
+			int hit = 0;
 			for (Wall w : walls) {
 				if (testtank.hit(w) == true) {
 					System.out.println("hit");
-				} else {
-					tank.moveForward();
-				}
+					hit++;
+				} 
 			}
+			if(hit == 0) {
+				tank.moveForward();
+			}
+			hit = 0;
 			return;
 		}
 
@@ -106,13 +119,17 @@ public class Game {
 			testtank = new Tank((int)nexPo.getX(),(int)nexPo.getY(), tank.getRect().width,
 					tank.getRect().height, tank.getTeam(), tank.getColor());
 			
+			int hit = 0;
 			for (Wall w : walls) {
 				if (testtank.hit(w) == true) {
 					System.out.println("hit");
-				} else {
-					tank.moveBack();
-				}
+					hit++;
+				} 
 			}
+			if(hit == 0) {
+				tank.moveBack();
+			}
+			hit = 0;
 			return;
 		}
 
