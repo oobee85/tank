@@ -32,7 +32,7 @@ public class Game {
 		Wheel wheel = new Wheel(300, 200, 10, 5, Color.gray, 100, 10);
 		wheels.add(wheel);
 
-		Wall wall = new Wall(0, 0, 100, 100, Color.black);
+		Wall wall = new Wall(400, 300, 100, 100, Color.black);
 		walls.add(wall);
 
 		// Projectile a = new Projectile(100, 100, 10, 10, 5, -2, Color.BLUE);
@@ -57,8 +57,8 @@ public class Game {
 		if (ticks % 2 == 0) {
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point b = a.getLocation();
-			mx = (int) b.getX();// -68
-			my = (int) b.getY();// -59
+			mx = (int) b.getX()-68;// -68
+			my = (int) b.getY()-59;// -59
 
 		}
 
@@ -83,10 +83,12 @@ public class Game {
 	// What do you want to do when a key is hit?
 	public void keyHit(String str) {
 //		System.out.println("(keyHit): " + s);
-		Tank testtank = tank;
+		
 		
 		if (str.equals("up")) {
-			testtank = new Tank(tank.getRect().x, tank.getRect().y - tank.getMoveS(), tank.getRect().width,
+			Tank testtank = tank;
+			Rectangle nexPo = tank.canMoveF();
+			testtank = new Tank((int)nexPo.getX(),(int)nexPo.getY(), tank.getRect().width,
 					tank.getRect().height, tank.getTeam(), tank.getColor());
 			for (Wall w : walls) {
 				if (testtank.hit(w) == true) {
@@ -99,8 +101,11 @@ public class Game {
 		}
 
 		if (str.equals("down")) {
-			testtank = new Tank(tank.getRect().x, tank.getRect().y + tank.getMoveS(), tank.getRect().width,
+			Tank testtank = tank;
+			Rectangle nexPo = tank.canMoveB();
+			testtank = new Tank((int)nexPo.getX(),(int)nexPo.getY(), tank.getRect().width,
 					tank.getRect().height, tank.getTeam(), tank.getColor());
+			
 			for (Wall w : walls) {
 				if (testtank.hit(w) == true) {
 					System.out.println("hit");
@@ -143,14 +148,14 @@ public class Game {
 			Projectile asdf = new Projectile((int) (tank.getRect().getX() + tank.getRect().getWidth()) + 2 * dx,
 					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy, 5, 5, 0, 0, Color.BLACK, p,
 					50, 5);
-			Projectile test = new Projectile((int) (tank.getRect().getX()) ,
-					(int) (tank.getRect().getY()),5,5, 0,0,Color.RED,p,50,5);
+//			Projectile test = new Projectile((int) (tank.getRect().getX()) ,
+//					(int) (tank.getRect().getY()),5,5, 0,0,Color.RED,p,50,5);
 			
 //			Projectile asdf = new Projectile((int)tank.getRect().getX(), (int)tank.getRect().getY(),5, 5, 		//old moving line projectile
 //					((int)tank.getRect().getX()-mx)/10, ((int)tank.getRect().getY()-my)/10, Color.BLACK, p);
 			
 			proj.add(asdf);
-			proj.add(test);
+//			proj.add(test);
 //			System.out.println(p.getX()+":"+p.getY()+" :point");
 			return;
 		}

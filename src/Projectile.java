@@ -69,9 +69,9 @@ public class Projectile {
 		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);
 //		System.out.println(point.getX()+":"+point.getY());
 		if(curTime == time) {
-//			fade(g);
+			fade(g);
 		}
-		change(point);
+//		change(point);
 		curTime++;
 		
 	}

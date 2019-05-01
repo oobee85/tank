@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 public class Tank {
 	private static final double HIT_THRESHOLD = 0;
 	private Rectangle rect;
+	private Rectangle back;
 	private String team;
 	private Color color;
 	private double rotate = 45;
@@ -19,6 +20,7 @@ public class Tank {
 		rect = new Rectangle(x, y, w, h);
 		team = t;
 		color = c;
+		back = canMoveB();
 	}
 
 	public void draw(Graphics g, int mx, int my) {
@@ -28,6 +30,8 @@ public class Tank {
 		//	g.drawRect(rect.x, rect.y, rect.width, rect.height);
 			g2d.rotate(Math.toRadians(-10), 240 + 480 / 2, 240 + 480 / 2);
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
+			Rectangle b = canMoveF();
+			g.fillRect((int)b.getX(), (int)b.getY(), (int)b.getWidth(), (int)b.getHeight());
 		}
 		
 		if(Game.aiming == true) {
@@ -44,12 +48,28 @@ public class Tank {
 		
 	}
 	public void moveForward() {
-	
+		
 		int x = (int)(Math.sin(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE);
 		int y = (int)(Math.cos(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE*-1);
+		
 //		System.out.println(x+"x");
 //		System.out.println(y+"y");
 		rect.translate(x, y);
+	}
+	public Rectangle canMoveF() {
+		int x = (int)(Math.sin(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE);
+		int y = (int)(Math.cos(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE*-1);
+		Rectangle nextPo = new Rectangle((int)rect.getX(),(int)rect.getY(),(int)rect.getWidth(),(int)rect.getHeight());
+		nextPo.translate(x, y);
+		return nextPo;
+		
+	}
+	public Rectangle canMoveB() {
+		int x = (int)(Math.sin(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE);
+		int y = (int)(Math.cos(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE*-1);
+		Rectangle nextPo = new Rectangle((int)rect.getX(),(int)rect.getY(),(int)rect.getWidth(),(int)rect.getHeight());
+		nextPo.translate(x*-1, y*-1);
+		return nextPo;
 		
 	}
 	
