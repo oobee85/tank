@@ -30,8 +30,30 @@ public class Tank {
 		//	g.drawRect(rect.x, rect.y, rect.width, rect.height);
 			g2d.rotate(Math.toRadians(-10), 240 + 480 / 2, 240 + 480 / 2);
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
-			Rectangle b = canMoveF();
-			g.fillRect((int)b.getX(), (int)b.getY(), (int)b.getWidth(), (int)b.getHeight());
+			
+			Rectangle forw = canMoveF();
+			g.drawRect((int)forw.getX(), (int)forw.getY(), (int)forw.getWidth()-1, (int)forw.getHeight()-1);
+			g.fillRect((int)back.getX(), (int)back.getY(), (int)back.getWidth(), (int)back.getHeight());
+			
+			
+			for(int x = 0; x<rect.width; x++) {
+				for(int x2 = 0; x2 <back.width; x2++) {
+					g.drawLine(rect.x+x, rect.y, back.x+x2, back.y);//fills in the space between the 
+				}													//top faces of the rectangles
+			}
+			for(int y = 0; y<rect.height; y++) {
+				for(int y2 = 0; y2 <back.height; y2++) {
+					g.drawLine(rect.x, rect.y+y, back.x, back.y+y2);//fills in the space between the 
+				}													//left faces of the rectangles
+			}
+			for(int x = 0; x<rect.width; x++) {
+				for(int x2 = 0; x2 <back.width; x2++) {
+					g.drawLine(rect.x+x, rect.y+rect.height, back.x+x2, back.y+back.height);
+																	//fills in the space
+				}													//between the bottom faces 
+			}														//of the rectangles
+			
+			g.setColor(color);
 		}
 		
 		if(Game.aiming == true) {
@@ -48,9 +70,10 @@ public class Tank {
 		
 	}
 	public void moveForward() {
-		
 		int x = (int)(Math.sin(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE);
 		int y = (int)(Math.cos(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE*-1);
+		Rectangle temp = new Rectangle(rect.x,rect.y,rect.width,rect.height);
+		back = temp;
 		
 //		System.out.println(x+"x");
 //		System.out.println(y+"y");
@@ -120,6 +143,10 @@ public class Tank {
 			return false;
 		double thisArea = area(rect), goArea = area(w.getRect()), overArea = area(over);
 		return overArea > Math.min(thisArea, goArea) * HIT_THRESHOLD;
+	}
+	
+	public boolean dead(Projectile p) {
+		return true;
 	}
 
 	public Rectangle collisionRect(Wall w) {

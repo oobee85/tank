@@ -132,18 +132,28 @@ public class Game {
 			hit = 0;
 			return;
 		}
-
+		if(str.equals("left")&&turn <= -16+1) {//resets turn when makes full revolution
+			turn = 0;
+			System.out.println(turn + "turnRes");
+			return;
+		}
 		if (str.equals("left")) {
 			turn += -1;
 			System.out.println(turn + "turnL");
 			return;
 		}
-
+		
+		if (str.equals("right")&&turn >=16-1) {//resets turn when makes full revolution
+			turn = 0;
+			System.out.println(turn + "turnRes");
+			return;
+		}
 		if (str.equals("right")) {
 			turn += 1;
 			System.out.println(turn + "turnR");
 			return;
 		}
+		
 		if (str.equals("resTurn")) {
 			turn = 0;
 			System.out.println(turn + "resTurn");
@@ -165,6 +175,7 @@ public class Game {
 			Projectile asdf = new Projectile((int) (tank.getRect().getX() + tank.getRect().getWidth()) + 2 * dx,
 					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy, 5, 5, 0, 0, Color.BLACK, p,
 					50, 5);
+			
 //			Projectile test = new Projectile((int) (tank.getRect().getX()) ,
 //					(int) (tank.getRect().getY()),5,5, 0,0,Color.RED,p,50,5);
 			
