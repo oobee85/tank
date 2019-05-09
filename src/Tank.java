@@ -26,14 +26,21 @@ public class Tank {
 	public void draw(Graphics g, int mx, int my) {
 		if (rect != null) {
 			Graphics2D g2d = (Graphics2D) g;
-			g2d.rotate(Math.toRadians(10), 240 + 480 / 2, 240 + 480 / 2);
-		//	g.drawRect(rect.x, rect.y, rect.width, rect.height);
-			g2d.rotate(Math.toRadians(-10), 240 + 480 / 2, 240 + 480 / 2);
-			g.fillRect(rect.x, rect.y, rect.width, rect.height);
+			g2d.rotate(Math.toRadians(10), 240 + 480 / 2, 240 + 480 / 2);		// rotates screen to get diagonal move
+//			g.drawRect(rect.x, rect.y, rect.width, rect.height);
+			g2d.rotate(Math.toRadians(-10), 240 + 480 / 2, 240 + 480 / 2);		// rotates screen back to normal location
+			g.fillRect(rect.x, rect.y, rect.width, rect.height);				// draws main tank
 			
 			Rectangle forw = canMoveF();
-			g.drawRect((int)forw.getX(), (int)forw.getY(), (int)forw.getWidth()-1, (int)forw.getHeight()-1);
-			g.fillRect((int)back.getX(), (int)back.getY(), (int)back.getWidth(), (int)back.getHeight());
+			g.drawRect((int)forw.getX(), (int)forw.getY(), (int)forw.getWidth()-1, (int)forw.getHeight()-1); //draws next move of tank
+			g.fillRect((int)back.getX(), (int)back.getY(), (int)back.getWidth(), (int)back.getHeight());	 //draws prev position of tank
+			
+			g.drawLine(forw.x,forw.y+forw.height-1,rect.x,rect.y+rect.height-1);						//draws lines between next move and tank
+			g.drawLine(forw.x+forw.width-1,forw.y,rect.x+rect.width-1,rect.y);
+			g.drawLine(forw.x,forw.y,rect.x,rect.y);
+			g.drawLine(forw.x+forw.width-1,forw.y+forw.height-1,rect.x+rect.width-1,rect.y+rect.height-1);
+			
+			
 			
 			
 			for(int x = 0; x<rect.width; x++) {
@@ -48,7 +55,7 @@ public class Tank {
 			}
 			for(int x = 0; x<rect.width; x++) {
 				for(int x2 = 0; x2 <back.width; x2++) {
-					g.drawLine(rect.x+x, rect.y+rect.height, back.x+x2, back.y+back.height);
+					g.drawLine(rect.x+x, rect.y+rect.height-1, back.x+x2, back.y+back.height-1);
 																	//fills in the space
 				}													//between the bottom faces 
 			}														//of the rectangles
@@ -100,9 +107,12 @@ public class Tank {
 		
 		int x = (int)(Math.sin(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE);
 		int y = (int)(Math.cos(Game.turn/(maxturn)*2*Math.PI)*MOVESIZE*-1);
-		System.out.println(x+"x");
-		System.out.println(y+"y");
-		rect.translate(x*-1, y*-1);
+		Rectangle temp = new Rectangle(rect.x,rect.y,rect.width,rect.height);
+		back = temp;
+		
+//		System.out.println(x+"x");
+//		System.out.println(y+"y");
+		rect.translate(x/2*-1, y/2*-1);
 	}
 
 	public void moveLeft(int num) {

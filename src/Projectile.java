@@ -11,9 +11,10 @@ public class Projectile {
 	private Point point;
 	public int time;
 	public int curTime = 0;
-	private int explodeS;
+	private int explodeSize;
+	private Point tankPos;
 	
-	public Projectile(int x, int y, int w, int h, int sx, int sy, Color c, Point p, int t, int eS) {
+	public Projectile(int x, int y, int w, int h, int sx, int sy, Color c, Point p, int t, int eS, Point tP) {
 
 		rect = new Rectangle(x, y, w, h);
 		speedx = sx;
@@ -21,7 +22,8 @@ public class Projectile {
 		color = c;
 		point = p;
 		time = t;
-		explodeS = eS;
+		explodeSize = eS;
+		tankPos = tP;
 	}
 
 	public void move() {
@@ -29,33 +31,22 @@ public class Projectile {
 		Rectangle temp = new Rectangle();
 		temp.setBounds((int) rect.getX() + speedx, (int) rect.getY() + speedy, (int) rect.getWidth(),
 				(int) rect.getHeight());
-		rect = temp;
+//		rect = temp;
+//		change();
 		
 	}
-	public void change(Point p) {
-		int x = (int) p.getX();
-		int y = (int) p.getY();
-		int dx = (int) (p.getX()-rect.getX());
-		int dy = (int) (p.getY()-rect.getY());
+	public void change() {
+		int xdif =  Math.abs(tankPos.x-point.x);
+		int x = xdif/2 +xdif;
+		int ydif = Math.abs(tankPos.y-point.y);
+		int y = ydif/2 +ydif;
+//		System.out.println(x+", "+y);
 		
-		if(x>rect.getX()) {
-//			Rectangle temp1 = new Rectangle((int)rect.getX()+dx/2, (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
-//			rect = temp;
-			speedx +=1; 
-		}else if(x<rect.getX()) {
-//			Rectangle temp2 = new Rectangle((int)rect.getX()-dx/2, (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
-//			rect = temp;
-			speedx -=1;
-		}
-		if(y>rect.getY()) {
-//			Rectangle temp3 = new Rectangle((int)rect.getX(), (int)rect.getY()+dy/2, (int)rect.getWidth(), (int)rect.getHeight());
-//			rect = temp;
-			speedy +=1;
-		}else if(y<rect.getY()) {
-//			Rectangle temp4 = new Rectangle((int)rect.getX(), (int)rect.getY()-dy/2, (int)rect.getWidth(), (int)rect.getHeight());
-//			rect = temp;
-			speedy -=1;
-		}
+		Point end = new Point(x,y);
+		int yPo = 1/2*x*x;
+		System.out.println(yPo);
+		rect.setBounds((int)rect.getX(),yPo,(int)rect.getWidth(),(int)rect.getHeight());
+		
 	}
 
 	public Color getColor() {
@@ -69,9 +60,8 @@ public class Projectile {
 		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);
 //		System.out.println(point.getX()+":"+point.getY());
 		if(curTime == time) {
-			fade(g);
+//			fade(g);
 		}
-//		change(point);
 		curTime++;
 		
 	}
@@ -93,8 +83,8 @@ public class Projectile {
 		
 	
 	public void explode(Graphics g) {
-		g.fillRect((int) (point.getX() - rect.getWidth()*explodeS/2), (int) (point.getY() - rect.getHeight()*explodeS/2),
-				(int) rect.getWidth() * explodeS, (int) rect.getHeight() * explodeS);
+		g.fillRect((int) (point.getX() - rect.getWidth()*explodeSize/2), (int) (point.getY() - rect.getHeight()*explodeSize/2),
+				(int) rect.getWidth() * explodeSize, (int) rect.getHeight() * explodeSize);
 		speedx = 0;
 		speedy = 0;
 	}
