@@ -42,7 +42,6 @@ public class Tank {
 			
 			
 			
-			
 			for(int x = 0; x<rect.width; x++) {
 				for(int x2 = 0; x2 <back.width; x2++) {
 					g.drawLine(rect.x+x, rect.y, back.x+x2, back.y);//fills in the space between the 
@@ -59,9 +58,15 @@ public class Tank {
 																	//fills in the space
 				}													//between the bottom faces 
 			}														//of the rectangles
+			int dx = (int)rect.getX()-mx;
+			int dy = (int)rect.getY()-my;
 			
+			g.setColor(Color.BLACK);
+			g.fillRect(rect.x+rect.width/4+1, rect.y+rect.height/4, rect.width/2+1, rect.height/2+1);
+			g.drawLine(rect.x+rect.width/2, rect.y+rect.height/2, rect.x+rect.width+dx, rect.y+rect.height+dy);
 			g.setColor(color);
 		}
+		
 		
 		if(Game.aiming == true) {
 			aim(g, mx, my);			
