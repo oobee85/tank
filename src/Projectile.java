@@ -32,17 +32,24 @@ public class Projectile {
 		temp.setBounds((int) rect.getX() + speedx, (int) rect.getY() + speedy, (int) rect.getWidth(),
 				(int) rect.getHeight());
 //		rect = temp;
-//		change();
+		change();
 		
 	}
+	Rectangle asdf = new Rectangle();
+	Rectangle asd = new Rectangle();
 	public void change() {
 		int xdif =  Math.abs(tankPos.x-point.x);
-		int x = xdif/2 +xdif;
-		int ydif = Math.abs(tankPos.y-point.y);
-		int y = ydif/2 +ydif;
-//		System.out.println(x+", "+y);
 		
-		Point end = new Point(x,y);
+		Point last = new Point(point.x-xdif/2,tankPos.y);
+		asdf.setBounds(last.x, last.y, 10, 10);
+		
+		int x = Math.abs(last.x-tankPos.x)/2;
+		
+		Point vertex = new Point(last.x+x,point.y-(x/4));
+		asd.setBounds(vertex.x, vertex.y, 10, 10);
+		
+		
+		
 		int yPo = 1/2*x*x;
 		System.out.println(yPo);
 		rect.setBounds((int)rect.getX(),yPo,(int)rect.getWidth(),(int)rect.getHeight());
@@ -56,6 +63,11 @@ public class Projectile {
 	public void draw(Graphics g) {
 		if (rect != null) {
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
+			g.setColor(Color.BLUE);
+			g.fillRect(asdf.x,asdf.y,asdf.width,asdf.height);
+			g.setColor(Color.GREEN);
+			g.fillRect(asd.x, asd.y, asd.width, asd.height);
+			g.setColor(color);
 		}
 		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);
 //		System.out.println(point.getX()+":"+point.getY());
@@ -121,3 +133,4 @@ public class Projectile {
 	}
 
 }
+
