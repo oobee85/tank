@@ -27,32 +27,60 @@ public class Projectile {
 	}
 
 	public void move() {
-		
+//		speedx = 10;
 		Rectangle temp = new Rectangle();
 		temp.setBounds((int) rect.getX() + speedx, (int) rect.getY() + speedy, (int) rect.getWidth(),
 				(int) rect.getHeight());
-//		rect = temp;
+		rect = temp;
 		change();
 		
 	}
-	Rectangle asdf = new Rectangle();
-	Rectangle asd = new Rectangle();
+	
+	Rectangle lastPo = new Rectangle();
+	Rectangle vertex = new Rectangle();
+	int y;
+	boolean hitVert = false;
 	public void change() {
+		
 		int xdif =  Math.abs(tankPos.x-point.x);
 		
-		Point last = new Point(point.x-xdif/2,tankPos.y);
-		asdf.setBounds(last.x, last.y, 10, 10);
+		Point endPo = new Point(point.x-xdif/2,tankPos.y);
+		lastPo.setBounds(endPo.x, endPo.y, 10, 10);
 		
-		int x = Math.abs(last.x-tankPos.x)/2;
+		int x = Math.abs(endPo.x-tankPos.x)/2;
 		
-		Point vertex = new Point(last.x+x,point.y-(x/4));
-		asd.setBounds(vertex.x, vertex.y, 10, 10);
+		Point ver = new Point(endPo.x+x,(tankPos.x-lastPo.x));
+		vertex.setBounds(ver.x, ver.y, 10, 10);
 		
+		if(hitVert() == true) {
+			hitVert = true;
+			System.out.println("hitvert");
+		}
+		if(hitVert == false) {
+			speedx = -1*(rect.x-vertex.x)/(rect.width/2);
+			speedy = -1*(rect.y-vertex.y)/(rect.height/2);
+		}else {
+			System.out.println("pastvert");
+			speedx = -1*(rect.x-lastPo.x)/(rect.width/2);
+			speedy = -1*(rect.y-lastPo.y)/(rect.height/2);
+		}
+		
+		
+		if(Math.signum(speedx)==1) {
+			speedx+=2;
+		}if(Math.signum(speedy)==1) {
+			speedy+=2;
+		}
+		if(Math.signum(speedx)==-1) {
+			speedx-=2;
+		}if(Math.signum(speedy)==-1) {
+			speedy-=2;
+		}
 		
 		
 		int yPo = 1/2*x*x;
-		System.out.println(yPo);
-		rect.setBounds((int)rect.getX(),yPo,(int)rect.getWidth(),(int)rect.getHeight());
+//		System.out.println(yPo);
+//		rect.setBounds((int)rect.getX(),yPo,(int)rect.getWidth(),(int)rect.getHeight());
 		
 	}
 
@@ -64,17 +92,18 @@ public class Projectile {
 		if (rect != null) {
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
 			g.setColor(Color.BLUE);
-			g.fillRect(asdf.x,asdf.y,asdf.width,asdf.height);
+			g.fillRect(lastPo.x,lastPo.y,lastPo.width,lastPo.height);
 			g.setColor(Color.GREEN);
-			g.fillRect(asd.x, asd.y, asd.width, asd.height);
+			g.fillRect(vertex.x, vertex.y, vertex.width, vertex.height);
+			g.setColor(Color.CYAN);
+			
+//			g.fillRect(m, y, 2, 2);
+//			g.drawArc(lastPo.x, lastPo.y,vertex.x-lastPo.x, vertex.y-lastPo.y, 1, 90);
 			g.setColor(color);
+			
 		}
-		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);
-//		System.out.println(point.getX()+":"+point.getY());
-		if(curTime == time) {
-//			fade(g);
-		}
-		curTime++;
+		
+		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);//aiming point
 		
 	}
 
@@ -100,15 +129,23 @@ public class Projectile {
 		speedx = 0;
 		speedy = 0;
 	}
-
+	
+	public boolean hitVert() {
+		if(rect.intersects(vertex)) {
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean hit() {
-			if (rect.contains(point.getX(), rect.getY())) {
-//				System.out.println(rect.getX() + ":" + rect.getY() + " :rect");
+			if (rect.contains(point.getX(), point.getY())) {
 				return true;
-			} else if (rect.contains(rect.getX(), point.getY())) {
-//				System.out.println(rect.getX() + ":" + rect.getY() + " :rect");
-				return true;
-			}
+				
+			} 
+//			else if (rect.contains(rect.getX(), p.getY())) {
+//				return true;
+//				
+//			}
 			return false;
 //		Rectangle over = collisionRect(point);
 //		if (over.isEmpty()) {
@@ -133,4 +170,3 @@ public class Projectile {
 	}
 
 }
-
