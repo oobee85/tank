@@ -56,7 +56,11 @@ public class Game {
 //			}
 //		}Wall
 //	}
-
+	
+	public void updateMousePos(int x, int y) {
+		mx = x;
+		my = y;
+	}
 	
 	// 10 milliseconds = 100 times per second
 	protected void updateGame() {
@@ -66,8 +70,9 @@ public class Game {
 		if (ticks % 2 == 0) {
 			PointerInfo a = MouseInfo.getPointerInfo();
 			Point b = a.getLocation();
-			mx = (int) b.getX()-68;// -68
-			my = (int) b.getY()-59;// -59
+			
+//			mx = (int) b.getX();// -68
+//			my = (int) b.getY();// -59
 
 		}
 
@@ -176,19 +181,19 @@ public class Game {
 //					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy, 5, 5, 0, 0, Color.BLACK, p,
 //					50, 5, tp);
 			
-			Projectile test2 = new Projectile((int) (tank.getRect().getX()),
-					(int) (tank.getRect().getY()), 10, 10, 2, 2, Color.BLACK, p,
-					50, 5, tp);
+//			Projectile test2 = new Projectile((int) (tank.getRect().getX()),
+//					(int) (tank.getRect().getY()), 10, 10, 2, 2, Color.BLACK, p,
+//					50, 5, tp);
 			
 //			Projectile test = new Projectile((int) (tank.getRect().getX()) ,
 //					(int) (tank.getRect().getY()),5,5, 0,0,Color.RED,p,50,5);
 			
-//			Projectile asdf = new Projectile((int)tank.getRect().getX(), (int)tank.getRect().getY(),5, 5, 		//old moving line projectile
-//					((int)tank.getRect().getX()-mx)/10, ((int)tank.getRect().getY()-my)/10, Color.BLACK, p);
+			Projectile asdf = new Projectile((int)tank.getRect().getX(), (int)tank.getRect().getY(),5, 5, 		//old moving line projectile
+					((int)tank.getRect().getX()-mx)/10, ((int)tank.getRect().getY()-my)/10, Color.BLACK, p, 50, 5, tp);
 			
-//			proj.add(asdf);
+			proj.add(asdf);
 //			proj.add(test);
-			proj.add(test2);
+//			proj.add(test2);
 //			System.out.println(p.getX()+":"+p.getY()+" :point");
 			return;
 		}

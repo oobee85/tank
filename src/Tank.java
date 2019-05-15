@@ -24,6 +24,7 @@ public class Tank {
 	}
 
 	public void draw(Graphics g, int mx, int my) {
+		
 		if (rect != null) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.rotate(Math.toRadians(10), 240 + 480 / 2, 240 + 480 / 2);		// rotates screen to get diagonal move
@@ -78,6 +79,7 @@ public class Tank {
 		int dx = (int)rect.getX()-mx;
 		int dy = (int)rect.getY()-my;
 		g.drawLine((int)(rect.getX()+rect.getWidth())+2*dx, (int)(rect.getY()+rect.getHeight())+2*dy, mx, my);
+		g.drawString(mx+", "+my, 300, 50);
 		g.setColor(Color.BLACK);
 		
 	}

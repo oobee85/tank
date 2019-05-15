@@ -27,7 +27,7 @@ public class Projectile {
 	}
 
 	public void move() {
-//		speedx = 10;
+		
 		Rectangle temp = new Rectangle();
 		temp.setBounds((int) rect.getX() + speedx, (int) rect.getY() + speedy, (int) rect.getWidth(),
 				(int) rect.getHeight());
@@ -42,45 +42,40 @@ public class Projectile {
 	boolean hitVert = false;
 	public void change() {
 		
-		int xdif =  Math.abs(tankPos.x-point.x);
+//		int xdif =  Math.abs(tankPos.x-point.x);
 		
-		Point endPo = new Point(point.x-xdif/2,tankPos.y);
-		lastPo.setBounds(endPo.x, endPo.y, 10, 10);
+//		Point endPo = new Point(point.x-xdif/2,tankPos.y);
+//		lastPo.setBounds(endPo.x, endPo.y, 10, 10);
+//		
+//		int x = Math.abs(endPo.x-tankPos.x)/2;
+//		
+//		Point ver = new Point(lastPo.x+x,(tankPos.y)-100);
+//		vertex.setBounds(ver.x, ver.y, 10, 10);
 		
-		int x = Math.abs(endPo.x-tankPos.x)/2;
-		
-		Point ver = new Point(endPo.x+x,(tankPos.x-lastPo.x));
-		vertex.setBounds(ver.x, ver.y, 10, 10);
-		
-		if(hitVert() == true) {
-			hitVert = true;
-			System.out.println("hitvert");
-		}
-		if(hitVert == false) {
-			speedx = -1*(rect.x-vertex.x)/(rect.width/2);
-			speedy = -1*(rect.y-vertex.y)/(rect.height/2);
-		}else {
-			System.out.println("pastvert");
-			speedx = -1*(rect.x-lastPo.x)/(rect.width/2);
-			speedy = -1*(rect.y-lastPo.y)/(rect.height/2);
-		}
-		
-		
-		if(Math.signum(speedx)==1) {
-			speedx+=2;
-		}if(Math.signum(speedy)==1) {
-			speedy+=2;
-		}
-		if(Math.signum(speedx)==-1) {
-			speedx-=2;
-		}if(Math.signum(speedy)==-1) {
-			speedy-=2;
-		}
-		
-		
-		int yPo = 1/2*x*x;
-//		System.out.println(yPo);
-//		rect.setBounds((int)rect.getX(),yPo,(int)rect.getWidth(),(int)rect.getHeight());
+//		if(hitVert() == true) {
+//			hitVert = true;
+//			System.out.println("hitvert");
+//		}
+//		if(hitVert == false) {
+//			speedx = -1*(rect.x-vertex.x)/(rect.width/2);
+//			speedy = -1*(rect.y-vertex.y)/(rect.height/2);
+//		}else {
+//			System.out.println("pastvert");
+//			speedx = -1*(rect.x-lastPo.x)/(rect.width/2);
+//			speedy = -1*(rect.y-lastPo.y)/(rect.height/2);
+//		}
+//		
+//		
+//		if(Math.signum(speedx)==1) {
+//			speedx+=2;
+//		}if(Math.signum(speedy)==1) {
+//			speedy+=2;
+//		}
+//		if(Math.signum(speedx)==-1) {
+//			speedx-=2;
+//		}if(Math.signum(speedy)==-1) {
+//			speedy-=2;
+//		}
 		
 	}
 
@@ -100,7 +95,6 @@ public class Projectile {
 //			g.fillRect(m, y, 2, 2);
 //			g.drawArc(lastPo.x, lastPo.y,vertex.x-lastPo.x, vertex.y-lastPo.y, 1, 90);
 			g.setColor(color);
-			
 		}
 		
 		g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 2, 2);//aiming point
