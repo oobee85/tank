@@ -100,7 +100,6 @@ public class Frame extends JPanel{
 		
 		gamepanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		gamepanel.setBackground(new Color(255, 255, 255));
-		mapKeyStrokesToActions(gamepanel);
 
 		frame.add(gamepanel);
 		frame.pack();
@@ -127,20 +126,33 @@ public class Frame extends JPanel{
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
+				int key = e.getKeyCode();
 				
+				if(key==KeyEvent.VK_W) {
+					gameInstance.keyHit("up");
+				}else if(key==KeyEvent.VK_A) {
+					gameInstance.keyHit("left");
+				}else if(key==KeyEvent.VK_S) {
+					gameInstance.keyHit("down");
+				}else if(key==KeyEvent.VK_D) {
+					gameInstance.keyHit("right");
+				}else if(key==KeyEvent.VK_E) {
+					gameInstance.keyHit("aim");
+				}else if(key==KeyEvent.VK_Q) {
+					gameInstance.keyHit("resturn");
+				}else if(key==KeyEvent.VK_SPACE) {
+					gameInstance.keyHit("shot");
+				}
 			}
 		});
 		gamepanel.addMouseMotionListener(new MouseMotionListener() {
@@ -161,78 +173,6 @@ public class Frame extends JPanel{
 	
 	
 
-	private void mapKeyStrokesToActions(JPanel gpanel) {
-
-		// A map is an Data storage interface which defines
-		// an association of a key with a value
-		// to "add" to a map you use the "put" method
-		// to "get" from a map you use "get(key)" and the 
-		// value associated with the key is returned (or null)
-		ActionMap map = gpanel.getActionMap();
-		InputMap inMap = gpanel.getInputMap();
-
-		// code below associates pressing the up arrow with the command "up"
-		// essentially creating the command "up" being broadcast any time the 
-		// up key is hit
-		inMap.put(KeyStroke.getKeyStroke("pressed UP"), "up");
-		inMap.put(KeyStroke.getKeyStroke("pressed DOWN"), "down");
-		inMap.put(KeyStroke.getKeyStroke("pressed LEFT"), "left");
-		inMap.put(KeyStroke.getKeyStroke("pressed RIGHT"), "right");
-		
-		inMap.put(KeyStroke.getKeyStroke("pressed W"), "up");
-		inMap.put(KeyStroke.getKeyStroke("pressed S"), "down");
-		inMap.put(KeyStroke.getKeyStroke("pressed A"), "left");
-		inMap.put(KeyStroke.getKeyStroke("pressed D"), "right");
-		inMap.put(KeyStroke.getKeyStroke("pressed Q"), "resTurn");
-		inMap.put(KeyStroke.getKeyStroke("pressed E"), "aim");
-		inMap.put(KeyStroke.getKeyStroke("pressed SPACE"), "shot");
-		// code below associates the "up" action with anything in the 
-		// actionPerformed method.  Right now, it just prints something
-		map.put("up", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("up");
-			}
-		});
-		map.put("down", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("down");
-			}
-		});
-		map.put("left", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("left");
-			}
-		});
-		map.put("right", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("right");
-			}
-		});
-		map.put("resTurn", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("resTurn");
-			}
-		});
-		map.put("aim", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("aim");
-			}
-		});
-		map.put("shot", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gameInstance.hit("shot");
-			}
-		});
-	}
-	
-	
 	
 	
 	

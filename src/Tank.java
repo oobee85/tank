@@ -65,7 +65,9 @@ public class Tank {
 			g.setColor(Color.BLACK);
 			g.fillRect(rect.x+rect.width/4+1, rect.y+rect.height/4, rect.width/2+1, rect.height/2+1);
 			g.drawLine(rect.x+rect.width/2, rect.y+rect.height/2, rect.x+rect.width+dx, rect.y+rect.height+dy);
+			
 			g.setColor(color);
+			
 		}
 		
 		
