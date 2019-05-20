@@ -26,10 +26,13 @@ public class Game {
 	private List<Wheel> wheels = new ArrayList();
 	protected static int turn = 0;
 	static boolean aiming = false;
+	protected static Point centerScreen;
 	private int mx;
 	private int my;
+	
 
-	public Game() {
+	public Game(int x, int y) {
+		centerScreen = new Point(x,y);
 		Wheel wheel = new Wheel(300, 200, 10, 5, Color.gray, 100, 10);
 		wheels.add(wheel);
 
@@ -57,6 +60,11 @@ public class Game {
 //		}Wall
 //	}
 	
+	public static int getTime() {
+		int time = ticks;
+		return time;
+		
+	}
 	public void updateMousePos(int x, int y) {
 		mx = x;
 		my = y;
@@ -81,8 +89,14 @@ public class Game {
 
 		}
 		if (ticks % 10 == 0) {
-			for (Projectile p : proj) {
-				p.move();
+			for (int p =0;p<proj.size();p++) {
+				
+				if(proj.get(p).isOld()==true) {
+					System.out.println("remove");
+//					proj.remove(proj.get(p));
+				}else {
+					proj.get(p).move();
+				}
 			}
 			for (Wheel w : wheels) {
 				w.refresh(turn);
@@ -174,7 +188,7 @@ public class Game {
 			Point tp = new Point (tank.getRect().x, tank.getRect().y);
 			Point p = new Point((int) (tank.getRect().getX() + tank.getRect().getWidth()) + 2 * dx,
 					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy);
-			//Projectile(x,y,w,h speedx, speedy, color, point of explosion, time to deteriorate, explode size, tankPosition)
+			//Projectile(x,y,w,h speedx, speedy, color, point of explosion, spawn time, explode size, tankPosition)
 			
 //			Projectile asdf = new Projectile((int) (tank.getRect().getX() + tank.getRect().getWidth()) + 2 * dx,
 //					(int) (tank.getRect().getY() + tank.getRect().getHeight()) + 2 * dy, 5, 5, 0, 0, Color.BLACK, p,
@@ -188,7 +202,7 @@ public class Game {
 //					(int) (tank.getRect().getY()),5,5, 0,0,Color.RED,p,50,5);
 			
 			Projectile asdf = new Projectile((int)tank.getRect().getX(), (int)tank.getRect().getY(),5, 5, 		//old moving line projectile
-					((int)tank.getRect().getX()-mx)/10, ((int)tank.getRect().getY()-my)/10, Color.BLACK, p, 50, 5, tp);
+					((int)tank.getRect().getX()-mx)/10, ((int)tank.getRect().getY()-my)/10, Color.BLACK, p, ticks/*spawn T */, 5, tp);
 			
 			proj.add(asdf);
 //			proj.add(test);
@@ -232,3 +246,4 @@ public class Game {
 	}
 
 }
+

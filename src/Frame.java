@@ -17,15 +17,16 @@ public class Frame extends JPanel{
 	public JPanel panel;
 	public JFrame frame;
 	public JPanel gamepanel;
-	public Game gameInstance = new Game();
 	private int WIDTH;
 	private int HEIGHT;
+	public Game gameInstance;
 	
 	public Frame(int w, int h) {
 		frame = new JFrame("Tank");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		WIDTH = w;
 		HEIGHT = h;
+		gameInstance = new Game(WIDTH/2, HEIGHT/2);
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -37,7 +38,6 @@ public class Frame extends JPanel{
 				}
 			}
 		});
-		Game game = new Game();
 	}
 	
 	
@@ -184,3 +184,4 @@ public class Frame extends JPanel{
 	
 	
 }
+

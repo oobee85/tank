@@ -9,74 +9,54 @@ public class Projectile {
 	private int speedy;
 	private Color color;
 	private Point point;
-	public int time;
+	public int t;
 	public int curTime = 0;
 	private int explodeSize;
 	private Point tankPos;
+	private int g = -10;
+	private int v;
+	private int h;
+	private Point center;
+	private int spawnTime;
 	
-	public Projectile(int x, int y, int w, int h, int sx, int sy, Color c, Point p, int t, int eS, Point tP) {
+	Rectangle lastPo = new Rectangle();
+	Rectangle vertex = new Rectangle();
+	boolean hitVert = false;
+	
+	public Projectile(int x, int y, int w, int hi, int sx, int sy, Color c, Point p, int time, int eS, Point tP){
 
-		rect = new Rectangle(x, y, w, h);
+		rect = new Rectangle(x, y, w, hi);
 		speedx = sx;
 		speedy = sy;
 		color = c;
 		point = p;
-		time = t;
+		t = Game.getTime()-time;
+		spawnTime = time;
 		explodeSize = eS;
 		tankPos = tP;
+		center = Game.centerScreen;
+		v = 5;
+		h = 0+ t*v + t*t*g;
+		
 	}
 
 	public void move() {
-		
+		change();
 		Rectangle temp = new Rectangle();
 		temp.setBounds((int) rect.getX() + speedx, (int) rect.getY() + speedy, (int) rect.getWidth(),
 				(int) rect.getHeight());
 		rect = temp;
-		change();
+
+		
 		
 	}
 	
-	Rectangle lastPo = new Rectangle();
-	Rectangle vertex = new Rectangle();
-	int y;
-	boolean hitVert = false;
+	
+	
 	public void change() {
-		
-//		int xdif =  Math.abs(tankPos.x-point.x);
-		
-//		Point endPo = new Point(point.x-xdif/2,tankPos.y);
-//		lastPo.setBounds(endPo.x, endPo.y, 10, 10);
-//		
-//		int x = Math.abs(endPo.x-tankPos.x)/2;
-//		
-//		Point ver = new Point(lastPo.x+x,(tankPos.y)-100);
-//		vertex.setBounds(ver.x, ver.y, 10, 10);
-		
-//		if(hitVert() == true) {
-//			hitVert = true;
-//			System.out.println("hitvert");
-//		}
-//		if(hitVert == false) {
-//			speedx = -1*(rect.x-vertex.x)/(rect.width/2);
-//			speedy = -1*(rect.y-vertex.y)/(rect.height/2);
-//		}else {
-//			System.out.println("pastvert");
-//			speedx = -1*(rect.x-lastPo.x)/(rect.width/2);
-//			speedy = -1*(rect.y-lastPo.y)/(rect.height/2);
-//		}
-//		
-//		
-//		if(Math.signum(speedx)==1) {
-//			speedx+=2;
-//		}if(Math.signum(speedy)==1) {
-//			speedy+=2;
-//		}
-//		if(Math.signum(speedx)==-1) {
-//			speedx-=2;
-//		}if(Math.signum(speedy)==-1) {
-//			speedy-=2;
-//		}
-		
+		System.out.println(h);
+		t = Game.getTime()-spawnTime;;
+		h = (0+ t*v + t*t*g)/1000;
 	}
 
 	public Color getColor() {
@@ -85,12 +65,22 @@ public class Projectile {
 
 	public void draw(Graphics g) {
 		if (rect != null) {
+			
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
+			g.setColor(Color.RED);
+//			if(h>300) {
+				int h2 = 300-h;
+				g.drawRect(rect.x, rect.y+h, rect.width, rect.height);
+//			}else if(h<300) {
+				g.drawRect(rect.x, rect.y+h, rect.width, rect.height);
+//			}
+			
 			g.setColor(Color.BLUE);
 			g.fillRect(lastPo.x,lastPo.y,lastPo.width,lastPo.height);
 			g.setColor(Color.GREEN);
 			g.fillRect(vertex.x, vertex.y, vertex.width, vertex.height);
 			g.setColor(Color.CYAN);
+			g.fillRect(center.x, center.y, 10, 10);
 			
 //			g.fillRect(m, y, 2, 2);
 //			g.drawArc(lastPo.x, lastPo.y,vertex.x-lastPo.x, vertex.y-lastPo.y, 1, 90);
@@ -130,6 +120,12 @@ public class Projectile {
 		}
 		return false;
 	}
+	public boolean isOld() {
+		if((Game.getTime()-spawnTime)>5000) {
+			return true;
+		}
+		return false;
+	}
 	
 	public boolean hit() {
 			if (rect.contains(point.getX(), point.getY())) {
@@ -164,3 +160,4 @@ public class Projectile {
 	}
 
 }
+
