@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-
+										
 public class Tank {
 	private static final double HIT_THRESHOLD = 0;
 	private Rectangle rect;

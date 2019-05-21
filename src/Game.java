@@ -91,12 +91,19 @@ public class Game {
 		if (ticks % 10 == 0) {
 			for (int p =0;p<proj.size();p++) {
 				
-				if(proj.get(p).isOld()==true) {
-					System.out.println("remove");
-//					proj.remove(proj.get(p));
-				}else {
-					proj.get(p).move();
+//				if(proj.get(p).isOld()==true) {
+//					System.out.println("remove");
+////					proj.remove(proj.get(p));
+//				}
+				for(int wall = 0; wall<walls.size();wall++) {
+					Rectangle inter = proj.get(p).ricochet(walls.get(wall), proj.get(p).nexPo());
+					if(inter.isEmpty()==false) {
+						proj.get(p).bounce(walls.get(wall).getFace(inter));
+					}
 				}
+				
+				proj.get(p).move();
+				
 			}
 			for (Wheel w : wheels) {
 				w.refresh(turn);

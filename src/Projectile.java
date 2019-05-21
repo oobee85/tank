@@ -13,9 +13,9 @@ public class Projectile {
 	public int curTime = 0;
 	private int explodeSize;
 	private Point tankPos;
-	private int g = -10;
-	private int v;
-	private int h;
+//	private int g = -10;
+//	private int v;
+//	private int h;
 	private Point center;
 	private int spawnTime;
 	
@@ -35,8 +35,40 @@ public class Projectile {
 		explodeSize = eS;
 		tankPos = tP;
 		center = Game.centerScreen;
-		v = 5;
-		h = 0+ t*v + t*t*g;
+//		v = 5;
+//		h = 0+ t*v + t*t*g;
+		
+	}
+	public Rectangle nexPo() {
+		Rectangle next = new Rectangle();
+		next.setBounds(rect.x+speedx, rect.y+speedy, rect.width, rect.height);
+		return next;
+	}
+	
+	public void bounce(int s) {
+		System.out.println("bounce");
+		Rectangle bounce = new Rectangle();
+		System.out.println(s);
+		
+		if(s == 1) {
+			speedy *= -1;
+			bounce.setBounds(rect.x+speedx, rect.y+speedy, rect.width, rect.height);
+			rect = bounce;
+		}if(s == 2) {
+			speedx *= -1;
+			bounce.setBounds(rect.x+speedx, rect.y+speedy, rect.width, rect.height);
+			rect = bounce;
+		}if(s == 3) {
+			speedy *= -1;
+			bounce.setBounds(rect.x+speedx, rect.y+speedy, rect.width, rect.height);
+			rect = bounce;
+		}if(s == 4) {
+			speedx *= -1;
+			bounce.setBounds(rect.x+speedx, rect.y+speedy, rect.width, rect.height);
+			rect = bounce;
+		}
+		
+		
 		
 	}
 
@@ -54,9 +86,9 @@ public class Projectile {
 	
 	
 	public void change() {
-		System.out.println(h);
-		t = Game.getTime()-spawnTime;;
-		h = (0+ t*v + t*t*g)/1000;
+//		System.out.println(h);
+//		t = Game.getTime()-spawnTime;;
+//		h = (0+ t*v + t*t*g)/1000;
 	}
 
 	public Color getColor() {
@@ -69,10 +101,10 @@ public class Projectile {
 			g.fillRect(rect.x, rect.y, rect.width, rect.height);
 			g.setColor(Color.RED);
 //			if(h>300) {
-				int h2 = 300-h;
-				g.drawRect(rect.x, rect.y+h, rect.width, rect.height);
+//				int h2 = 300-h;
+//				g.drawRect(rect.x, rect.y+h, rect.width, rect.height);
 //			}else if(h<300) {
-				g.drawRect(rect.x, rect.y+h, rect.width, rect.height);
+//				g.drawRect(rect.x, rect.y+h, rect.width, rect.height);
 //			}
 			
 			g.setColor(Color.BLUE);
@@ -145,6 +177,11 @@ public class Projectile {
 //		}
 	}
 
+	public Rectangle ricochet(Wall w, Rectangle p) {
+		
+			return p.intersection(w.getRect());
+	}
+	
 	private Rectangle collisionRect(Point p) {
 		Rectangle temp = new Rectangle((int) p.getX() - 1, (int) p.getY() - 1, 2, 2);
 		return this.rect.intersection(temp);
@@ -157,6 +194,9 @@ public class Projectile {
 
 	private static double area(Rectangle rect) {
 		return rect.width * rect.height;
+	}
+	public Rectangle getRect() {
+		return rect;
 	}
 
 }
