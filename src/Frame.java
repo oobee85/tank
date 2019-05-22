@@ -152,7 +152,10 @@ public class Frame extends JPanel{
 					gameInstance.keyHit("resturn");
 				}else if(key==KeyEvent.VK_SPACE) {
 					gameInstance.keyHit("shot");
+				}else if(key==KeyEvent.VK_M) {
+					gameInstance.keyHit("debug");
 				}
+				
 			}
 		});
 		gamepanel.addMouseMotionListener(new MouseMotionListener() {

@@ -29,6 +29,7 @@ public class Game {
 	protected static Point centerScreen;
 	private int mx;
 	private int my;
+	protected static boolean debugMode = false;
 	
 
 	public Game(int x, int y) {
@@ -36,10 +37,10 @@ public class Game {
 		Wheel wheel = new Wheel(300, 200, 10, 5, Color.gray, 100, 10);
 		wheels.add(wheel);
 
-		Wall wall = new Wall(400, 300, 100, 100, Color.black);
-		Wall wall1 = new Wall(200, 300, 100, 100, Color.black);
-		Wall wall2 = new Wall(400, 100, 100, 100, Color.black);
-		Wall wall3 = new Wall(200, 100, 100, 100, Color.black);
+		Wall wall = new Wall(400, 300, 100, 100, Color.GRAY);
+		Wall wall1 = new Wall(200, 300, 100, 100, Color.GRAY);
+		Wall wall2 = new Wall(400, 100, 100, 100, Color.GRAY);
+		Wall wall3 = new Wall(200, 100, 100, 100, Color.GRAY);
 		
 		walls.add(wall);
 		walls.add(wall1);
@@ -61,9 +62,7 @@ public class Game {
 //	}
 	
 	public static int getTime() {
-		int time = ticks;
-		return time;
-		
+		return ticks;
 	}
 	public void updateMousePos(int x, int y) {
 		mx = x;
@@ -90,19 +89,20 @@ public class Game {
 		}
 		if (ticks % 10 == 0) {
 			for (int p =0;p<proj.size();p++) {
+//				proj.get(p).slow();
 				
-//				if(proj.get(p).isOld()==true) {
-//					System.out.println("remove");
-////					proj.remove(proj.get(p));
-//				}
 				for(int wall = 0; wall<walls.size();wall++) {
 					Rectangle inter = proj.get(p).ricochet(walls.get(wall), proj.get(p).nexPo());
 					if(inter.isEmpty()==false) {
-						proj.get(p).bounce(walls.get(wall).getFace(inter));
+						proj.get(p).bounce(walls.get(wall).getFace(inter), walls.get(wall).getRect());
 					}
 				}
+				if(proj.get(p).age()==true) {
+					proj.remove(p);
+				}else {
+					proj.get(p).move();
+				}
 				
-				proj.get(p).move();
 				
 			}
 			for (Wheel w : wheels) {
@@ -121,6 +121,7 @@ public class Game {
 		
 		if (str.equals("up")) {
 			Tank testtank = tank;
+			
 			Rectangle nexPo = tank.canMoveF();
 			testtank = new Tank((int)nexPo.getX(),(int)nexPo.getY(), tank.getRect().width,
 					tank.getRect().height, tank.getTeam(), tank.getColor());
@@ -130,6 +131,7 @@ public class Game {
 					System.out.println("hit");
 					hit++;
 				} 
+				
 			}
 			if(hit == 0) {
 				tank.moveForward();
@@ -158,12 +160,25 @@ public class Game {
 			return;
 		}
 		if(str.equals("left")&&turn <= -16+1) {//resets turn when makes full revolution
+			
 			turn = 0;
 			System.out.println(turn + "turnRes");
 			return;
 		}
 		if (str.equals("left")) {
-			turn += -1;
+			Tank backtank = tank;
+			Rectangle backpo = tank.nexMoveB(-1);//gives the future turn loc
+			backtank = new Tank(backpo.x,backpo.y,tank.getRect().width,(int)tank.getRect().height,tank.getTeam(), tank.getColor() );
+			int hit = 0;
+			for (Wall w : walls) {
+				if (backtank.hit(w) == true) {
+					System.out.println("hit");
+					hit++;
+				} 
+			}
+			if(hit==0) {
+				turn += -1;
+			}
 			System.out.println(turn + "turnL");
 			return;
 		}
@@ -174,7 +189,19 @@ public class Game {
 			return;
 		}
 		if (str.equals("right")) {
-			turn += 1;
+			Tank backtank = tank;
+			Rectangle backpo = tank.nexMoveB(1);//gives the future turn loc
+			backtank = new Tank(backpo.x,backpo.y,tank.getRect().width,(int)tank.getRect().height,tank.getTeam(), tank.getColor() );
+			int hit = 0;
+			for (Wall w : walls) {
+				if (backtank.hit(w) == true) {
+					System.out.println("hit");
+					hit++;
+				} 
+			}
+			if(hit==0) {
+				turn += 1;
+			}
 			System.out.println(turn + "turnR");
 			return;
 		}
@@ -183,6 +210,11 @@ public class Game {
 			turn = 0;
 			System.out.println(turn + "resturn");
 			return;
+		}
+		if (str.equals("debug") && debugMode == false) {
+			debugMode = true;
+		} else if (str.equals("debug") && debugMode == true) {
+			debugMode = false;
 		}
 		if (str.equals("aim") && aiming == false) {
 			aiming = true;
@@ -228,6 +260,7 @@ public class Game {
 
 	public void draw(Graphics g) {
 		for (Wall w : walls) {
+			g.setColor(w.getColor());
 			w.draw(g);
 		}
 		for (Tank t : tanks) {
