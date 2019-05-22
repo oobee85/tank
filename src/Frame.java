@@ -17,15 +17,16 @@ public class Frame extends JPanel{
 	public JPanel panel;
 	public JFrame frame;
 	public JPanel gamepanel;
-	public Game gameInstance = new Game();
 	private int WIDTH;
 	private int HEIGHT;
+	public Game gameInstance;
 	
 	public Frame(int w, int h) {
 		frame = new JFrame("Tank");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		WIDTH = w;
 		HEIGHT = h;
+		gameInstance = new Game(WIDTH/2, HEIGHT/2);
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -37,34 +38,12 @@ public class Frame extends JPanel{
 				}
 			}
 		});
-		Game game = new Game();
-
-
-	}
-	public void paintGrid(Graphics g){
-
-		int rows = 20;
-
-		int cols = 30;
-		int width = getSize().width;
-		int height = getSize().height;
-
-		// draw the rows
-		int rowHt = height / (rows);
-		for (int i = 0; i < rows; i++)
-			g.drawLine(0, i * rowHt, width, i * rowHt);
-
-		// draw the columns
-		int rowWid = width / (cols);
-		for (int i = 0; i < cols; i++)
-			g.drawLine(i * rowWid, 0, i * rowWid, height);
 	}
 	
 	
 	
 	public void menuSetUp() {
 		panel = new JPanel();
-
 		
 		JButton start = new JButton("startGame");
 		start.addActionListener(new ActionListener() {
@@ -75,7 +54,6 @@ public class Frame extends JPanel{
 		});
 		start.setPreferredSize(new Dimension(100,50));
 		panel.add(start);
-
 		
 		
 		JButton exit = new JButton("exit");
@@ -105,7 +83,6 @@ public class Frame extends JPanel{
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				gameInstance.drawGame(g);
-
 				
 			}
 		};
@@ -122,7 +99,7 @@ public class Frame extends JPanel{
 	
 		
 		gamepanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		gamepanel.setBackground(new Color(40, 42, 54));
+		gamepanel.setBackground(new Color(255, 255, 255));
 
 		frame.add(gamepanel);
 		frame.pack();
@@ -175,7 +152,10 @@ public class Frame extends JPanel{
 					gameInstance.keyHit("resturn");
 				}else if(key==KeyEvent.VK_SPACE) {
 					gameInstance.keyHit("shot");
+				}else if(key==KeyEvent.VK_M) {
+					gameInstance.keyHit("debug");
 				}
+				
 			}
 		});
 		gamepanel.addMouseMotionListener(new MouseMotionListener() {
@@ -207,3 +187,4 @@ public class Frame extends JPanel{
 	
 	
 }
+
