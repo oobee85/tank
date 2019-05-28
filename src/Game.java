@@ -37,14 +37,13 @@ public class Game {
 	protected static int power1 = 100;
 	private int kills = 0;
 	protected static int spawnPoints = 12;
-
+	private int prevSpawn = 0;
+	
 	public Game(int x, int y) {
 		centerScreen = new Point(x,y);
 		Wheel wheel = new Wheel(300, 200, 10, 5, Color.gray, 100, 10);
 		wheels.add(wheel);
 		
-		Target target = new Target(300,300,20,20,Color.BLUE);
-		targets.add(target);
 		
 		Wall wall = new Wall(400, 300, 100, 100, Color.GRAY);
 		Wall wall1 = new Wall(200, 300, 100, 100, Color.GRAY);
@@ -62,6 +61,7 @@ public class Game {
 		tank2 = new Tank(200, 200, 10, 10, "BLUE", Color.BLUE);
 		tanks.add(tank1);
 //		tanks.add(tank2);
+		fillSpawns();
 		
 	}
 	public Game(int x, int y, int z) {
@@ -69,8 +69,6 @@ public class Game {
 		Wheel wheel = new Wheel(300, 200, 10, 5, Color.gray, 100, 10);
 		wheels.add(wheel);
 		
-		Target target = new Target(300,300,20,20,Color.BLUE);
-		targets.add(target);
 		
 
 		tank1 = new Tank(500, 500, 10, 10, "RED", Color.RED);
@@ -91,6 +89,15 @@ public class Game {
 	private void makeTarg() {
 		
 		int x = (int)(Math.random()*spawnPoints);
+		if(x == prevSpawn) {
+			
+			if((x+1)>= spawnPoints) {
+				x-=1;
+			}else {
+				x+=1;
+			}
+		}
+		prevSpawn = x;
 		System.out.println(x);
 		Point p = new Point(spawns.get(x).getPoint().x, spawns.get(x).getPoint().y);
 		Target t = new Target(p.x, p.y, 50, 50, Color.BLUE);
@@ -98,7 +105,7 @@ public class Game {
 		
 	}
 	private void updateScore(Graphics g) {
-		g.drawString("Score:"+kills*100, 100, 100);
+		g.drawString("Score:"+kills*100, 30, 30);
 		
 	}
 	public static int getTime() {
@@ -112,7 +119,6 @@ public class Game {
 	// 10 milliseconds = 100 times per second
 	protected void updateGame() {
 		ticks++;// track number times timer gone off
-		
 		
 		if (ticks % 2 == 0) {
 			PointerInfo a = MouseInfo.getPointerInfo();
@@ -480,6 +486,7 @@ public class Game {
 				
 				if(targets.isEmpty()==false && tarHit(targets.get(t), proj.get(p))==true) {
 					hit = true;
+					kills++;
 					targets.get(t).draw(g);
 					targets.remove(t);
 					proj.remove(p);

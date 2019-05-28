@@ -70,6 +70,15 @@ public class Tank {
 			int dx = (int)rect.getX()-mx;
 			int dy = (int)rect.getY()-my;
 			
+			int x = rect.x+rect.width/2;
+			int y = rect.y+rect.height/2;
+			int asdf = (x-rect.x)*(x-rect.x)+(y-rect.y)*(y-rect.y)-49;
+			
+//			System.out.println("circle:"+asdf);
+			Point p = new Point(mx, my);
+			g.setColor(Color.blue);
+			g.drawLine((int)(rect.getX()+rect.getWidth())+dx/6, (int)(rect.getY()+rect.getHeight())+dy/6, rect.x+rect.width/2, rect.y+rect.height/2);
+			
 			g.setColor(Color.BLACK);
 			g.fillRect(rect.x+rect.width/4+1, rect.y+rect.height/4, rect.width/2+1, rect.height/2+1); //draws turret
 			g.drawLine(rect.x+rect.width/2, rect.y+rect.height/2, rect.x+rect.width+dx, rect.y+rect.height+dy);

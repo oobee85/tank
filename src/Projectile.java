@@ -172,6 +172,7 @@ public class Projectile {
 		
 	
 	public void explode(Graphics g) {
+		rect.setBounds(point.x, point.y, 1, 1);
 		g.fillRect((int) (point.getX() - rect.getWidth()*explodeSize/2), (int) (point.getY() - rect.getHeight()*explodeSize/2),
 				(int) rect.getWidth() * explodeSize, (int) rect.getHeight() * explodeSize);
 		speedx = 0;
@@ -215,10 +216,20 @@ public class Projectile {
 	}
 	
 	public boolean hit() {
-			if (rect.contains(point.getX(), point.getY())) {
+		
+		for(int x = 0; x<10; x++) {
+			if (rect.x == point.x+x){
 				return true;
-				
-			} 
+			}else if (rect.x == point.x-x){
+				return true;
+			}
+			if(rect.y == point.y+x) {
+				return true;
+			}else if(rect.y == point.y-x) {
+				return true;
+			}
+		}
+			
 //			else if (rect.contains(rect.getX(), p.getY())) {
 //				return true;
 //				

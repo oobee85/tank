@@ -15,7 +15,9 @@ public class Target {
 		
 		g.setColor(color);
 		g.drawRect(rect.x, rect.y, rect.width, rect.height);
-		
+		g.drawRect(rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
+		g.drawRect(rect.x+rect.width/4+rect.width/8+1, rect.y+rect.height/4+rect.height/8+1, rect.width/4, rect.height/4);
+		g.drawRect(rect.x+rect.width/2-1, rect.y+rect.height/2-1, 2, 2);
 	}
 	public void dodge(int d) {
 		int dx = d;

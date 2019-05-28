@@ -14,6 +14,7 @@ import javax.swing.*;
 
 public class Frame extends JPanel{
 	private Timer timmy;
+	private Timer timmyTarg;
 	public JPanel panel;
 	public JFrame frame;
 	public JPanel gamepanel;
@@ -28,6 +29,7 @@ public class Frame extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		WIDTH = w;
 		HEIGHT = h;
+		targPractice = new Game(WIDTH/2, HEIGHT/2);
 		gameInstance = new Game(WIDTH/2, HEIGHT/2);
 		EventQueue.invokeLater(new Runnable() {
 			@Override
@@ -87,14 +89,16 @@ public class Frame extends JPanel{
 		frame.requestFocusInWindow();
 	
 	}
-	private void backToMenu(JPanel gp) {
+	private void backToMenu(JPanel gp, Game gi) {
 		frame.remove(gp);
+		Game temp = new Game(WIDTH, HEIGHT);
+		gi = temp;
 		menuSetUp();
+		
 		
 	}
 	private void targetPrac() {
 		System.err.println("Starting Game");
-		targPractice = new Game(WIDTH/2, HEIGHT/2, 1);
 		targPanel = new JPanel() {
 			@Override
 			public void paintComponent(Graphics g) {
@@ -114,6 +118,16 @@ public class Frame extends JPanel{
 		exit.setPreferredSize(new Dimension(100,50));
 		targPanel.add(exit);
 		
+		JButton bToMenu = new JButton("Back To Main Menu");
+		bToMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				backToMenu(targPanel, targPractice);
+				
+			}
+		});
+		bToMenu.setPreferredSize(new Dimension(100,50));
+		targPanel.add(bToMenu);
 	
 		
 		targPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -121,17 +135,17 @@ public class Frame extends JPanel{
 
 		frame.add(targPanel);
 		frame.pack();
-		frame.setVisible(true);
+//		frame.setVisible(true);
 		frame.requestFocusInWindow();
 	
-		timmy = new Timer(10, new ActionListener() {
+		timmyTarg = new Timer(10, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				targPractice.updateGame();
 				targPanel.repaint();
 			}
 		});
-		timmy.start();
+		timmyTarg.start();
 
 		frame.remove(panel);
 		frame.add(targPanel, BorderLayout.CENTER); 
@@ -177,6 +191,7 @@ public class Frame extends JPanel{
 				
 			}
 		});
+		
 		targPanel.addMouseMotionListener(new MouseMotionListener() {
 			
 			@Override
@@ -219,7 +234,7 @@ public class Frame extends JPanel{
 		bToMenu.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				backToMenu(gamepanel);
+				backToMenu(gamepanel, gameInstance);
 			}
 		});
 		bToMenu.setPreferredSize(new Dimension(100,50));
