@@ -14,23 +14,20 @@ import javax.swing.*;
 
 public class Frame extends JPanel{
 	private Timer timmy;
-	private Timer timmyTarg;
 	public JPanel panel;
 	public JFrame frame;
-	public JPanel gamepanel;
+	public JPanel gamepanel = new JPanel();
+	private JLayeredPane lpane = new JLayeredPane();
+	public Game gameInstance = new Game();
+	public JPanel directionsPage ;
 	private int WIDTH;
 	private int HEIGHT;
-	public Game gameInstance;
-	public Game targPractice;
-	public JPanel targPanel;
 	
 	public Frame(int w, int h) {
 		frame = new JFrame("Tank");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		WIDTH = w;
 		HEIGHT = h;
-		targPractice = new Game(WIDTH/2, HEIGHT/2);
-		gameInstance = new Game(WIDTH/2, HEIGHT/2);
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -42,15 +39,35 @@ public class Frame extends JPanel{
 				}
 			}
 		});
+		Game game = new Game();
+
+
+	}
+	public void paintGrid(Graphics g){
+
+		int rows = 20;
+
+		int cols = 30;
+		int width = getSize().width;
+		int height = getSize().height;
+
+		// draw the rows
+		int rowHt = height / (rows);
+		for (int i = 0; i < rows; i++)
+			g.drawLine(0, i * rowHt, width, i * rowHt);
+
+		// draw the columns
+		int rowWid = width / (cols);
+		for (int i = 0; i < cols; i++)
+			g.drawLine(i * rowWid, 0, i * rowWid, height);
 	}
 	
 	
-	
+
 	public void menuSetUp() {
-		
 		panel = new JPanel();
 		
-		JButton start = new JButton("Start Game");
+		JButton start = new JButton("startGame");
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -59,7 +76,42 @@ public class Frame extends JPanel{
 		});
 		start.setPreferredSize(new Dimension(100,50));
 		panel.add(start);
+
 		
+		
+		JButton exit = new JButton("exit");
+		exit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				exitGame();
+			}
+		});
+
+		exit.setPreferredSize(new Dimension(100,50));
+		panel.add(exit);
+
+		panel.setBackground(new Color(40,42,45));
+		panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		frame.add(panel);
+		frame.pack();
+		frame.setVisible(true);
+		frame.requestFocusInWindow();
+	
+	}
+		
+	private void start() {
+		
+		System.err.println("Starting Game");
+		gamepanel = new JPanel() {
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				gameInstance.drawGame(g);
+
+				
+			}
+		};
+//		gamepanel.setLayout(new GridLayout(2, 1));
 		
 		JButton exit = new JButton("Exit");
 		exit.addActionListener(new ActionListener() {
@@ -69,180 +121,22 @@ public class Frame extends JPanel{
 			}
 		});
 		exit.setPreferredSize(new Dimension(100,50));
-		panel.add(exit);
-
-		JButton target = new JButton("Target Practice");
-		target.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				targetPrac();
-			}
-		});
-		target.setPreferredSize(new Dimension(200,50));
-		panel.add(target);
-		
-		panel.setBackground(new Color(255,255,255));
-		panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		frame.add(panel);
-		frame.pack();
-		frame.setVisible(true);
-		frame.requestFocusInWindow();
-	
-	}
-	private void backToMenu(JPanel gp, Game gi) {
-		frame.remove(gp);
-		Game temp = new Game(WIDTH, HEIGHT);
-		gi = temp;
-		menuSetUp();
-		
-		
-	}
-	private void targetPrac() {
-		System.err.println("Starting Game");
-		targPanel = new JPanel() {
-			@Override
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				gameInstance.drawGame(g);
-				
-			}
-		};
-		
-		JButton exit = new JButton("exit");
-		exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				exitGame();
-			}
-		});
-		exit.setPreferredSize(new Dimension(100,50));
-		targPanel.add(exit);
-		
-		JButton bToMenu = new JButton("Back To Main Menu");
-		bToMenu.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				backToMenu(targPanel, targPractice);
-				
-			}
-		});
-		bToMenu.setPreferredSize(new Dimension(100,50));
-		targPanel.add(bToMenu);
-	
-		
-		targPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		targPanel.setBackground(new Color(255, 255, 255));
-
-		frame.add(targPanel);
-		frame.pack();
-//		frame.setVisible(true);
-		frame.requestFocusInWindow();
-	
-		timmyTarg = new Timer(10, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				targPractice.updateGame();
-				targPanel.repaint();
-			}
-		});
-		timmyTarg.start();
-
-		frame.remove(panel);
-		frame.add(targPanel, BorderLayout.CENTER); 
-		targPanel.setSize(frame.getSize());
-		frame.repaint();
-		System.err.println(targPanel.getWidth());
-		targPanel.requestFocus();
-		
-		targPanel.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				int key = e.getKeyCode();
-				
-				if(key==KeyEvent.VK_M) {
-					gameInstance.keyHit("debug");
-				}
-				if(key==KeyEvent.VK_W) {
-					gameInstance.keyHit("up1");
-				}else if(key==KeyEvent.VK_A) {
-					gameInstance.keyHit("left1");
-				}else if(key==KeyEvent.VK_S) {
-					gameInstance.keyHit("down1");
-				}else if(key==KeyEvent.VK_D) {
-					gameInstance.keyHit("right1");
-				}else if(key==KeyEvent.VK_E) {
-					gameInstance.keyHit("aim1");
-				}else if(key==KeyEvent.VK_Z) {
-					gameInstance.keyHit("resturn1");
-				}else if(key==KeyEvent.VK_Q) {
-					gameInstance.keyHit("shot1");
-				}
-				
-			}
-		});
-		
-		targPanel.addMouseMotionListener(new MouseMotionListener() {
-			
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				targPractice.updateMousePos(e.getX(),e.getY());
-			}
-			
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				
-			}
-		});
-		
-	}
-			
-		
-	private void start() {
-		System.err.println("Starting Game");
-		gamepanel = new JPanel() {
-			@Override
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				gameInstance.drawGame(g);
-				
-			}
-		};
-		
-		JButton exit = new JButton("exit");
-		exit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				exitGame();
-			}
-		});
-		exit.setPreferredSize(new Dimension(100,50));
 		gamepanel.add(exit);
-		
-		
-		JButton bToMenu = new JButton("Back To Main Menu");
-		bToMenu.addActionListener(new ActionListener() {
+
+		JButton directions = new JButton("Directions");
+		directions.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				backToMenu(gamepanel, gameInstance);
+			public void actionPerformed(ActionEvent args) {
+				directions();
+				frame.repaint();
 			}
 		});
-		bToMenu.setPreferredSize(new Dimension(100,50));
-		gamepanel.add(bToMenu);
+		directions.setPreferredSize(new Dimension(100,50));
+		gamepanel.add(directions);
 	
 		
 		gamepanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		gamepanel.setBackground(new Color(255, 255, 255));
+		gamepanel.setBackground(new Color(219, 237, 254));
 
 		frame.add(gamepanel);
 		frame.pack();
@@ -281,40 +175,21 @@ public class Frame extends JPanel{
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				
-				if(key==KeyEvent.VK_M) {
-					gameInstance.keyHit("debug");
-				}
 				if(key==KeyEvent.VK_W) {
-					gameInstance.keyHit("up1");
+					gameInstance.keyHit("up");
 				}else if(key==KeyEvent.VK_A) {
-					gameInstance.keyHit("left1");
+					gameInstance.keyHit("left");
 				}else if(key==KeyEvent.VK_S) {
-					gameInstance.keyHit("down1");
+					gameInstance.keyHit("down");
 				}else if(key==KeyEvent.VK_D) {
-					gameInstance.keyHit("right1");
+					gameInstance.keyHit("right");
 				}else if(key==KeyEvent.VK_E) {
-					gameInstance.keyHit("aim1");
-				}else if(key==KeyEvent.VK_Z) {
-					gameInstance.keyHit("resturn1");
+					gameInstance.keyHit("aim");
 				}else if(key==KeyEvent.VK_Q) {
-					gameInstance.keyHit("shot1");
+					gameInstance.keyHit("resturn");
+				}else if(key==KeyEvent.VK_SPACE) {
+					gameInstance.keyHit("shot");
 				}
-				if(key==KeyEvent.VK_I) {
-					gameInstance.keyHit("up2");
-				}else if(key==KeyEvent.VK_J) {
-					gameInstance.keyHit("left2");
-				}else if(key==KeyEvent.VK_K) {
-					gameInstance.keyHit("down2");
-				}else if(key==KeyEvent.VK_L) {
-					gameInstance.keyHit("right2");
-				}else if(key==KeyEvent.VK_O) {
-					gameInstance.keyHit("aim2");
-				}else if(key==KeyEvent.VK_M) {
-					gameInstance.keyHit("resturn2");
-				}else if(key==KeyEvent.VK_U) {
-					gameInstance.keyHit("shot2");
-				}
-				
 			}
 		});
 		gamepanel.addMouseMotionListener(new MouseMotionListener() {
@@ -341,9 +216,41 @@ public class Frame extends JPanel{
 	public void exitGame() {
 		System.exit(0);
 	}
-	
-	
-	
-	
-}
+
+	public void directions(){
+		directionsPage = new JPanel();
+		directionsPage.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+	frame.remove(gamepanel);
+		frame.add(directionsPage);
+
+
+	JLabel jlabel = new JLabel("To Play The Game,");
+	JLabel jlabel2 = new JLabel("Use W,A,S,D Keys To Move Around");
+	JLabel jlabel3 = new JLabel("Press 'E' To Turn On The Scope,");
+	JLabel jlabel4 = new JLabel("And Press SPACE to shoot the boolats!");
+	JLabel jlabel5 = new JLabel(" ");
+	JLabel jlabel6 = new JLabel("Have Fun!");
+	jlabel.setFont(new Font("Verdana",1,20));
+	jlabel.setHorizontalAlignment(JLabel.CENTER);
+	jlabel2.setFont(new Font("Verdana",1,20));
+	jlabel3.setFont(new Font("Verdana",1,20));
+	jlabel4.setFont(new Font("Verdana",1,20));
+	jlabel5.setFont(new Font("Verdana",1,20));
+	jlabel6.setFont(new Font("Verdana",1,20));
+
+
+	directionsPage.add(jlabel);
+	directionsPage.add(jlabel2);
+	directionsPage.add(jlabel3);
+	directionsPage.add(jlabel4);
+	directionsPage.add(jlabel5);
+	directionsPage.add(jlabel6);
+
+
+		frame.pack();
+		frame.setVisible(true);
+		frame.requestFocusInWindow();
+			}
+
+	}
 
