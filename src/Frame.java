@@ -16,18 +16,24 @@ public class Frame extends JPanel{
 	private Timer timmy;
 	public JPanel panel;
 	public JFrame frame;
-	public JPanel gamepanel = new JPanel();
-	private JLayeredPane lpane = new JLayeredPane();
-	public Game gameInstance = new Game();
-	public JPanel directionsPage ;
+	public JPanel gamepanel;
 	private int WIDTH;
 	private int HEIGHT;
+	public Game gameInstance;
+	public JPanel controls;
 	
-	public Frame(int w, int h) {
+	public Frame(int w, int h, int f) {
 		frame = new JFrame("Tank");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		WIDTH = w;
 		HEIGHT = h;
+		gameInstance = new Game(w, h);
+		
+		if(f == 1) {
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+			gameInstance = new Game(JFrame.MAXIMIZED_HORIZ, JFrame.MAXIMIZED_VERT);
+		}
+		
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -39,35 +45,14 @@ public class Frame extends JPanel{
 				}
 			}
 		});
-		Game game = new Game();
-
-
-	}
-	public void paintGrid(Graphics g){
-
-		int rows = 20;
-
-		int cols = 30;
-		int width = getSize().width;
-		int height = getSize().height;
-
-		// draw the rows
-		int rowHt = height / (rows);
-		for (int i = 0; i < rows; i++)
-			g.drawLine(0, i * rowHt, width, i * rowHt);
-
-		// draw the columns
-		int rowWid = width / (cols);
-		for (int i = 0; i < cols; i++)
-			g.drawLine(i * rowWid, 0, i * rowWid, height);
 	}
 	
 	
-
+	
 	public void menuSetUp() {
 		panel = new JPanel();
 		
-		JButton start = new JButton("startGame");
+		JButton start = new JButton("Start");
 		start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -76,27 +61,138 @@ public class Frame extends JPanel{
 		});
 		start.setPreferredSize(new Dimension(100,50));
 		panel.add(start);
-
 		
 		
-		JButton exit = new JButton("exit");
+		
+		JButton exit = new JButton("Exit");
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				exitGame();
 			}
 		});
-
 		exit.setPreferredSize(new Dimension(100,50));
 		panel.add(exit);
-
-		panel.setBackground(new Color(40,42,45));
+		
+		JButton controls = new JButton("View Controls");
+		controls.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlPage(1);
+			}
+		});
+		controls.setPreferredSize(new Dimension(100,50));
+		panel.add(controls);
+		
+		panel.setBackground(new Color(255,255,255));
 		panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.add(panel);
 		frame.pack();
 		frame.setVisible(true);
 		frame.requestFocusInWindow();
 	
+	}
+	private void controlPage(int x) {
+		controls = new JPanel();
+		if(x == 1) {
+			
+			JButton btoMenu = new JButton("Return");
+			btoMenu.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					backToMenu(x);
+				}
+			});
+			btoMenu.setPreferredSize(new Dimension(100,50));
+			controls.add(btoMenu);
+			frame.remove(panel);
+		}
+		
+		if(x == 0) {
+			JButton start = new JButton("Back To Game");
+			start.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					frame.remove(controls);
+					start();
+				}
+			});
+			start.setPreferredSize(new Dimension(100,50));
+			controls.add(start);
+			
+			frame.remove(gamepanel);
+		}
+		
+		
+		JButton exit = new JButton("Close Game");
+		exit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				exitGame();
+			}
+		});
+		exit.setPreferredSize(new Dimension(100,50));
+		controls.add(exit);
+		
+		
+		
+		
+
+		
+		JLabel jlabel = new JLabel("To Play The Game,");
+		JLabel jlabel2 = new JLabel("Use 'W,A,S,D' To Move Around");
+		JLabel jlabel3 = new JLabel("Press 'E' To Aim,");
+		JLabel jlabel4 = new JLabel("And 'Space' to shoot!");
+		JLabel jlabel5 = new JLabel(" ");
+		JLabel jlabel6 = new JLabel("Have Fun!");
+		JLabel jlabel7 = new JLabel("Press 'Q' to reset your tank's turn.");
+		JLabel jlabel8 = new JLabel("The wheel shows which way the tank is facing.");
+		JLabel jlabel9 = new JLabel("Click 'M' for debug mode.");
+		JLabel jlabel10 = new JLabel("Shoot the targets!");
+		JLabel jlabel11 = new JLabel("Read the tips!");
+		
+		jlabel.setFont(new Font("Verdana",1,20));
+		jlabel.setHorizontalAlignment(JLabel.CENTER);
+		jlabel2.setFont(new Font("Verdana",1,20));
+		jlabel3.setFont(new Font("Verdana",1,20));
+		jlabel4.setFont(new Font("Verdana",1,20));
+		jlabel5.setFont(new Font("Verdana",1,20));
+		jlabel6.setFont(new Font("Verdana",1,20));
+		jlabel7.setFont(new Font("Verdana",1,20));
+		jlabel8.setFont(new Font("Verdana",1,20));
+		jlabel9.setFont(new Font("Verdana",1,20));
+		jlabel10.setFont(new Font("Verdana",1,20));
+		jlabel11.setFont(new Font("Verdana",1,20));
+	
+		controls.add(jlabel);
+		controls.add(jlabel2);
+		controls.add(jlabel3);
+		controls.add(jlabel4);
+		controls.add(jlabel5);
+		controls.add(jlabel7);
+		controls.add(jlabel8);
+		controls.add(jlabel9);
+		controls.add(jlabel10);
+		controls.add(jlabel11);
+		controls.add(jlabel6);
+
+		controls.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		frame.add(controls);
+		frame.pack();
+		frame.setVisible(true);
+		frame.requestFocusInWindow();
+	}
+	
+	
+	private void backToMenu(int x) {
+		if(x == 1) {
+			frame.remove(controls);
+		}
+		if(x==0) {
+			frame.remove(gamepanel);	
+		}
+		
+		menuSetUp();
 	}
 		
 	private void start() {
@@ -107,13 +203,11 @@ public class Frame extends JPanel{
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				gameInstance.drawGame(g);
-
 				
 			}
 		};
-//		gamepanel.setLayout(new GridLayout(2, 1));
 		
-		JButton exit = new JButton("Exit");
+		JButton exit = new JButton("Close Game");
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -122,21 +216,29 @@ public class Frame extends JPanel{
 		});
 		exit.setPreferredSize(new Dimension(100,50));
 		gamepanel.add(exit);
-
-		JButton directions = new JButton("Directions");
-		directions.addActionListener(new ActionListener() {
+		
+		JButton btoMenu = new JButton("Back To Menu");
+		btoMenu.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent args) {
-				directions();
-				frame.repaint();
+			public void actionPerformed(ActionEvent arg0) {
+				backToMenu(0);
 			}
 		});
-		directions.setPreferredSize(new Dimension(100,50));
-		gamepanel.add(directions);
-	
+		btoMenu.setPreferredSize(new Dimension(100,50));
+		gamepanel.add(btoMenu);
+		
+		JButton controls = new JButton("Controls");
+		controls.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controlPage(0);
+			}
+		});
+		controls.setPreferredSize(new Dimension(100,50));
+		gamepanel.add(controls);
 		
 		gamepanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		gamepanel.setBackground(new Color(219, 237, 254));
+		gamepanel.setBackground(new Color(255, 255, 255));
 
 		frame.add(gamepanel);
 		frame.pack();
@@ -146,6 +248,7 @@ public class Frame extends JPanel{
 		timmy = new Timer(10, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
 				gameInstance.updateGame();
 				gamepanel.repaint();
 			}
@@ -189,7 +292,10 @@ public class Frame extends JPanel{
 					gameInstance.keyHit("resturn");
 				}else if(key==KeyEvent.VK_SPACE) {
 					gameInstance.keyHit("shot");
+				}else if(key==KeyEvent.VK_M) {
+					gameInstance.keyHit("debug");
 				}
+				
 			}
 		});
 		gamepanel.addMouseMotionListener(new MouseMotionListener() {
@@ -216,41 +322,9 @@ public class Frame extends JPanel{
 	public void exitGame() {
 		System.exit(0);
 	}
-
-	public void directions(){
-		directionsPage = new JPanel();
-		directionsPage.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-	frame.remove(gamepanel);
-		frame.add(directionsPage);
-
-
-	JLabel jlabel = new JLabel("To Play The Game,");
-	JLabel jlabel2 = new JLabel("Use W,A,S,D Keys To Move Around");
-	JLabel jlabel3 = new JLabel("Press 'E' To Turn On The Scope,");
-	JLabel jlabel4 = new JLabel("And Press SPACE to shoot the boolats!");
-	JLabel jlabel5 = new JLabel(" ");
-	JLabel jlabel6 = new JLabel("Have Fun!");
-	jlabel.setFont(new Font("Verdana",1,20));
-	jlabel.setHorizontalAlignment(JLabel.CENTER);
-	jlabel2.setFont(new Font("Verdana",1,20));
-	jlabel3.setFont(new Font("Verdana",1,20));
-	jlabel4.setFont(new Font("Verdana",1,20));
-	jlabel5.setFont(new Font("Verdana",1,20));
-	jlabel6.setFont(new Font("Verdana",1,20));
-
-
-	directionsPage.add(jlabel);
-	directionsPage.add(jlabel2);
-	directionsPage.add(jlabel3);
-	directionsPage.add(jlabel4);
-	directionsPage.add(jlabel5);
-	directionsPage.add(jlabel6);
-
-
-		frame.pack();
-		frame.setVisible(true);
-		frame.requestFocusInWindow();
-			}
-
-	}
+	
+	
+	
+	
+}
 

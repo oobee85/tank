@@ -19,6 +19,29 @@ public class Wall {
 		this.x = x;
 		this.y = y;
 	}
+	public int getFace(Rectangle inter) {
+		//topside = 1
+		//leftside = 2
+		//botside = 3
+		//rightside = 4
+		Rectangle one = new Rectangle(rect.x, rect.y, rect.width, rect.height/4);
+		Rectangle two = new Rectangle(rect.x, rect.y, rect.width/4, rect.height);
+		Rectangle three = new Rectangle(rect.x, rect.y+rect.height-rect.height/4, rect.width, rect.height/4);
+		Rectangle four = new Rectangle(rect.x+rect.width-rect.width/4, rect.y, rect.width/4, rect.height);
+		if(inter.intersects(one)==true) {
+			return 1;
+		} 
+		if(inter.intersects(two)==true) {
+			return 2;
+		}
+		if(inter.intersects(three)==true) {
+			return 3;
+		}
+		if(inter.intersects(four)==true) {
+			return 4;
+		}
+		return -1;
+	}
 	
 	public void draw(Graphics g) {
 		if(rect != null) {
